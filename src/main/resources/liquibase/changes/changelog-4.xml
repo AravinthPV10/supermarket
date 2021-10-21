@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+<property name="now" value="now()" dbms="mysql"/>
+
+    <changeSet id="4" author="aravinth">
+        <addColumn tableName="customer">
+            <column name="email" type="VARCHAR(200)" afterColumn="phone">
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

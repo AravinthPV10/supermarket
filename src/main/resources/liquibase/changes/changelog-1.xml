@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql"/>
+
+    <changeSet author="aravinth" id="1">
+        <createTable tableName="brand">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <createTable tableName="product">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="brand_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_brand_id"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="price" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="product" baseColumnNames="brand_id" constraintName="FK_brand_id" referencedTableName="brand"
+                                 referencedColumnNames="id"/>
+
+
+
+        <createTable tableName="inventory">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_product_id"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="inventory" baseColumnNames="product_id" constraintName="FK_product_id" referencedTableName="product"
+                                 referencedColumnNames="id"/>
+
+
+
+        <createTable tableName="customer">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="phone" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_deleted" type="ENUM('true','false')" defaultValue="false"/>
+        </createTable>
+
+        <createTable tableName="transaction">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="customer_phone" type="bigint" >
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_1_products_id"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="ENUM('SUCCESS','REVERTED')"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="product_id" constraintName="FK_1_products_id" referencedTableName="product"
+                                 referencedColumnNames="id"/>
+
+
+    <createTable tableName="point">
+        <column name="id" autoIncrement="true" type="BIGINT">
+            <constraints nullable="false" primaryKey="true"/>
+        </column>
+        <column name="customer_phone" type="bigint">
+        </column>
+        <column name="transaction_id" type="int">
+            <constraints nullable="false" foreignKeyName="FK_transaction_id"/>
+        </column>
+        <column name="point" type="int">
+            <constraints nullable="false"/>
+        </column>
+        <column name="created_at" type="datetime">
+            <constraints nullable="false"/>
+        </column>
+        <column name="updated_at" type="datetime">
+            <constraints nullable="false"/>
+        </column>
+        <column name="status" type="ENUM('SUCCESS','REVERTED')"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="point" baseColumnNames="transaction_id" constraintName="FK_transaction_id" referencedTableName="transaction"
+                             referencedColumnNames="id"/>
+
+    </changeSet>
+</databaseChangeLog>
